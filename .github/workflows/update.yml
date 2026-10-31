@@ -1,0 +1,36 @@
+name: Daily update
+
+on:
+  schedule:
+    - cron: "30 5 * * *" # after the site's 04:30 UTC export
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test the updater
+        run: cd scripts && python3 -m unittest test_update
+      - name: Fetch, validate and diff
+        id: update
+        run: python3 scripts/update.py
+      - name: Commit
+        run: |
+          git add data changes
+          if git diff --cached --quiet; then
+            echo "nothing changed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: ${{ steps.update.outputs.day }}, ${{ steps.update.outputs.sites }} sites, ${{ steps.update.outputs.changes }} changes"
+          git push

@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this data, please cite it as below."
+type: dataset
+title: "How the web treats AI agents"
+authors:
+  - name: "Online Web Directory"
+    website: "https://onlinewebdirectory.net"
+license: CC-BY-4.0
+repository-code: "https://github.com/onlinewebdirectory/agent-web-data"
+url: "https://onlinewebdirectory.net"
+keywords:
+  - ai-agents
+  - web-scraping
+  - robots-txt
+  - llms-txt
+  - bot-detection
